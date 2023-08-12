@@ -5,6 +5,7 @@ Accept: application/json
 POST http://localhost:8002/member/member/register
 Content-Type: application/x-www-form-urlencoded
 
-mobile=17762273596
+mobile=17762273597
+
 
 ###
