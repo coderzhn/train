@@ -12,10 +12,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @GetMapping("/count")
-    public Integer count(){
-        return Math.toIntExact(memberService.count());
-    }
     @PostMapping("/register")
     public CommonResp<Long> register(MemberRegisterReq req){
         long register = memberService.register(req);
