@@ -6,6 +6,10 @@ POST http://localhost:8002/member/member/register
 Content-Type: application/x-www-form-urlencoded
 
 mobile=13289806791
+###
 
+POST http://localhost:8002/member/member/send-code
+Content-Type: application/x-www-form-urlencoded
 
+mobile=13289806778
 ###
