@@ -3,9 +3,9 @@ package com.zhn.train.member.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.jwt.JWTUtil;
 import com.zhn.train.common.exception.BusinessException;
 import com.zhn.train.common.exception.BusinessExceptionEnum;
+import com.zhn.train.common.util.JwtUtil;
 import com.zhn.train.common.util.SnowUtil;
 import com.zhn.train.member.domain.Member;
 import com.zhn.train.member.domain.MemberExample;
@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MemberService {
@@ -83,10 +82,7 @@ public class MemberService {
         }
 
         MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
-        Map<String, Object> map = BeanUtil.beanToMap(memberLoginResp);
-        String key = "coder12306";
-        String token = JWTUtil.createToken(map, key.getBytes());
-        JWTUtil.createToken(map,key.getBytes());
+        String token = JwtUtil.createToken(memberLoginResp.getId(),memberLoginResp.getMobile());
         memberLoginResp.setToken(token);
         return memberLoginResp;
     }
