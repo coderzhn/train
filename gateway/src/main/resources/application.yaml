@@ -1,29 +1,18 @@
 server:
   port: 8000
-
-  # 路由转发，将/member/...的请求转发了member模块
 spring:
   cloud:
     gateway:
-      routes:
-        - id: member
-          uri: http://127.0.0.1:8002
-          predicates:
-            - Path=/member/**
       globalcors:
-        # 允许请求来源（老版本叫allowedOrigin）
         cors-configurations:
           '[/**]':
-            # 允许携带的头信息
-            allowedHeaders: "*"
-            # 允许的请求方式
-            allowedMethods: "*"
-            # 是否允许携带cookie
             allowCredentials: true
-            # 跨域检测的有效期，会发起一个OPTION请求
+            allowedHeaders: '*'
+            allowedMethods: '*'
+            allowedOriginPatterns: '*'
             maxAge: 3600
-
-  #spring.cloud.gateway.routes[0].uri=lb://member
-
-  # 允许请求来源（老版本叫allowedOrigin）
-#spring.cloud.gateway.globalcors.cors-configurations.[/**].allowedOriginPatterns=*
+      routes:
+        - id: member
+          predicates:
+            - Path=/member/**
+          uri: http://127.0.0.1:8002

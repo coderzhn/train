@@ -47,7 +47,6 @@ export default defineComponent({
     const loginForm = reactive({
       mobile: '17762273596',
       code: '',
-      remember: true,
     });
 
     const onFinish = values => {
@@ -59,7 +58,7 @@ export default defineComponent({
     };
 
     const sendCode = () => {
-        axios.post("http://localhost:8002/member/member/send-code",{
+        axios.post("http://localhost:8000/member/member/send-code",{
          mobile: loginForm.mobile
       }).then(response =>{
             console.log(response);
