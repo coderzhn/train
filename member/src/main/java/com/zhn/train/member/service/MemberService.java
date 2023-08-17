@@ -97,4 +97,8 @@ public class MemberService {
             return list.get(0);
         }
     }
+
+    public int count() {
+        return Math.toIntExact(memberMapper.countByExample(null));
+    }
 }

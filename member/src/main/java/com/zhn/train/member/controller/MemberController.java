@@ -16,6 +16,13 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    @GetMapping("/count")
+    public CommonResp<Integer> count(){
+        int count = memberService.count();
+        CommonResp<Integer> commonResp = new CommonResp<>();
+        commonResp.setContent(count);
+        return commonResp;
+    }
     @PostMapping("/register")
     public CommonResp<Long> register(@Valid MemberRegisterReq req){
         long register = memberService.register(req);
