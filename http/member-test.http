@@ -1,6 +1,6 @@
 GET http://localhost:8000/member/member/count
 Accept: application/json
-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2OTIyNTg4MDEsIm1vYmlsZSI6IjE3NzYyMjczNTk2IiwiaWQiOjE2OTEzMDY2ODk2MzIwMTQzMzYsImV4cCI6MTY5MjI4NDAwMSwiaWF0IjoxNjkyMjU4ODAxfQ.hZxlLB16416tnPg6o_dmt9ZVCk90-HE3xG_4x-GcSuA
+token: {{token}}
 
 ###
 
@@ -25,4 +25,15 @@ Content-Type: application/json
   "mobile": "13289806788",
   "code":"8888"
 }
+
+> {%
+client.log(JSON.stringify(response.body));
+client.log(JSON.stringify(response.body.content.token));
+client.global.set("token", response.body.content.token);
+%}
+
 ###
+
+
+
+=
