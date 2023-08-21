@@ -1,13 +1,11 @@
 package com.zhn.train.generator.gen;
 
-import freemarker.template.TemplateException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +16,15 @@ public class ServerGenerator {
         new File(toPath).mkdirs();
     }
 
-    public static void main(String[] args) throws IOException, TemplateException {
-        try {
-            getGeneratorPath();
-        } catch (DocumentException e) {
-            throw new RuntimeException(e);
-        }
+    public static void main(String[] args) throws Exception{
+        String generatorPath = getGeneratorPath();
+        // 读取table节点
+        Document document = new SAXReader().read("generator/" + generatorPath);
+        Node table = document.selectSingleNode("//table");
+        System.out.println(table);
+        Node tableName = table.selectSingleNode("@tableName");
+        Node domainObjectName = table.selectSingleNode("@domainObjectName");
+        System.out.println(tableName.getText() + "/" + domainObjectName.getText());
     }
 
     private static String getGeneratorPath() throws DocumentException {
