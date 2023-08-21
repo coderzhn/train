@@ -2,7 +2,7 @@
   <p>
       <a-button type="primary" @click="onAdd">新增</a-button>
   </p>
-  <a-table :dataSource="dataSource" :columns="columns"/>
+  <a-table :dataSource="passengers" :columns="columns"/>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
@@ -26,7 +26,7 @@
   </a-modal>
 </template>
 <script>
-import {defineComponent,ref,reactive} from "vue";
+import {defineComponent,ref,reactive,onMounted} from "vue";
 import {notification} from "ant-design-vue";
 import axios from "axios";
 
@@ -58,20 +58,7 @@ export default defineComponent({
       });
     };
 
-   const dataSource = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-      },
-      {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-      },
-    ];
+   const passengers = ref([]);
        const columns = [
       {
         title: '姓名',
@@ -79,25 +66,47 @@ export default defineComponent({
         key: 'name',
       },
       {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: '身份证',
+        dataIndex: 'idCard',
+        key: 'idCard',
       },
       {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '类型',
+        dataIndex: 'type',
+        key: 'type',
       },
     ];
 
-    return{
+    const handleQuery = (param) => {
+      axios.get("/member/passenger/query-list", {
+        params: {
+          page: param.page,
+          size: param.size
+        }
+      }).then((response) => {
+        let data = response.data;
+        if (data.success) {
+          passengers.value = data.content.list;
+        } else {
+          notification.error({description: data.message});
+        }
+      });
+    };
+    onMounted(() => {
+      handleQuery({
+        page: 1,
+        size: 2
+      });
+    });
 
+    return{
       visible,
       showModal,
       handleOk,
       passenger,
-      dataSource,
+      passengers,
       columns,
+      handleQuery,
     };
   },
 });
