@@ -59,6 +59,7 @@ export default defineComponent({
       updateTime: undefined,
     })
     const onAdd = () => {
+      passenger.value = {};
       visible.value = true;
     };
 
@@ -77,6 +78,7 @@ export default defineComponent({
         }
       });
     };
+
     let loading = ref(false);
     const passengers = ref([]);
     // 分页的三个属性名是固定的
@@ -111,12 +113,13 @@ export default defineComponent({
     const handleTableChange = (pagination) => {
       // console.log("看看自带的分页参数都有啥：" + pagination);
       handleQuery({
-        page: pagination.value.current,
-        size: pagination.value.pageSize
+        page: pagination.current,
+        size: pagination.pageSize
       });
     };
+
     const onEdit = (record) => {
-      passenger.value = record;
+      passenger.value = window.Tool.copy(record);
       visible.value = true;
     };
 
@@ -147,6 +150,8 @@ export default defineComponent({
         }
       });
     };
+
+
     onMounted(() => {
       handleQuery({
         page: 1,
