@@ -1,11 +1,15 @@
 <template>
   <p>
-      <a-button type="primary" @click="onAdd">新增</a-button>
+    <a-space>
+      <a-button type="primary" @click="handleQuery()">刷新</a-button>
+      <a-button type="primary" @click="showModal">新增</a-button>
+    </a-space>
   </p>
   <a-table :dataSource="passengers"
            :columns="columns"
            :pagination="pagination"
-           @change="handleTableChange"/>
+           @change="handleTableChange"
+           :loading="loading"/>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
@@ -60,7 +64,8 @@ export default defineComponent({
         }
       });
     };
-   const passengers = ref([]);
+    let loading = ref(false);
+    const passengers = ref([]);
     // 分页的三个属性名是固定的
     const pagination = reactive({
       total: 0,
@@ -95,12 +100,20 @@ export default defineComponent({
     };
 
     const handleQuery = (param) => {
+      if (!param) {
+        param = {
+          page: 1,
+          size: pagination.pageSize
+        };
+      }
+      loading.value = true;
       axios.get("/member/passenger/query-list", {
         params: {
           page: param.page,
           size: param.size
         }
       }).then((response) => {
+        loading.value = false;
         let data = response.data;
         if (data.success) {
           passengers.value = data.content.list;
@@ -130,6 +143,7 @@ export default defineComponent({
       handleQuery,
       pagination,
       handleTableChange,
+      loading,
     };
   },
 });
