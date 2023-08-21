@@ -4,7 +4,8 @@
   </p>
   <a-table :dataSource="passengers"
            :columns="columns"
-           :pagination="pagination"/>
+           :pagination="pagination"
+           @change="handleTableChange"/>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
@@ -85,6 +86,13 @@ export default defineComponent({
       },
     ];
 
+    const handleTableChange = (pagination) => {
+      // console.log("看看自带的分页参数都有啥：" + pagination);
+      handleQuery({
+        page: pagination.current,
+        size: pagination.pageSize
+      });
+    };
 
     const handleQuery = (param) => {
       axios.get("/member/passenger/query-list", {
@@ -96,6 +104,8 @@ export default defineComponent({
         let data = response.data;
         if (data.success) {
           passengers.value = data.content.list;
+          // 设置分页控件的值
+          pagination.current = param.page;
           pagination.total = data.content.total;
 
         } else {
@@ -106,7 +116,7 @@ export default defineComponent({
     onMounted(() => {
       handleQuery({
         page: 1,
-        size: 2
+        size: pagination.pageSize
       });
     });
 
@@ -119,6 +129,7 @@ export default defineComponent({
       columns,
       handleQuery,
       pagination,
+      handleTableChange,
     };
   },
 });
