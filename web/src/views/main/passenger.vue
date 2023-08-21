@@ -22,6 +22,13 @@
           <a @click="onEdit(record)">编辑</a>
         </a-space>
       </template>
+      <template v-else-if="column.dataIndex === 'type'">
+        <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.key">
+          <span v-if="item.key === record.type">
+            {{item.value}}
+          </span>
+        </span>
+      </template>
     </template>
   </a-table>
 
