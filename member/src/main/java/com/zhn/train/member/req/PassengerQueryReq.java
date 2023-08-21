@@ -1,13 +1,12 @@
 package com.zhn.train.member.req;
 
+import com.zhn.train.common.req.PageReq;
 import lombok.Data;
 
 @Data
-public class PassengerQueryReq{
+public class PassengerQueryReq extends PageReq {
 
     private Long memberId;
-
-
 
     @Override
     public String toString() {
