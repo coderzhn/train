@@ -51,12 +51,12 @@ public class ServerGenerator {
         DbUtil.user = userId.getText();
         DbUtil.password = password.getText();
 
-        // 示例：表名 jiawa_test
-        // Domain = JiawaTest
+        // 示例：表名 zhn_test
+        // Domain = ZhnTest
         String Domain = domainObjectName.getText();
-        // domain = jiawaTest
+        // domain = zhnTest
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
-        // do_main = jiawa-test
+        // do_main = zhn-test
         String do_main = tableName.getText().replaceAll("_", "-");
         // 表中文名
         String tableNameCn = DbUtil.getTableComment(tableName.getText());
@@ -75,13 +75,13 @@ public class ServerGenerator {
         param.put("readOnly", readOnly);
         System.out.println("组装参数：" + param);
 
-        // gen(Domain, param, "service", "service");
-        // gen(Domain, param, "controller/admin", "adminController");
-//         gen(Domain, param, "resp", "queryResp");
-//         gen(Domain, param, "req", "queryReq");
-        // gen(Domain, param, "resp", "queryResp");
-
-        genVue(do_main, param);
+         gen(Domain, param, "service", "service");
+         gen(Domain, param, "controller", "Controller");
+         gen(Domain, param, "resp", "queryResp");
+         gen(Domain, param, "req", "queryReq");
+         gen(Domain, param, "req", "saveReq");
+         gen(Domain, param, "resp", "queryResp");
+         genVue(do_main, param);
     }
 
     private static void gen(String Domain, Map<String, Object> param, String packageName, String target) throws IOException, TemplateException {
