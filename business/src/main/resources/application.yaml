@@ -1,0 +1,22 @@
+server:
+  port: 8002
+  servlet:
+    context-path: /business
+spring:
+  # 数据库连接
+  datasource:
+    url: jdbc:mysql://rm-cn-nwy3cdcr9000qk8o.rwlb.cn-chengdu.rds.aliyuncs.com/train_member?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: train_business
+    password: Zhn789@@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# mybatis xml路径
+  devtools:
+    livereload:
+      port: 35728
+logging:
+    level:
+      com.zhn.train.business.mapper:
+        trace
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+

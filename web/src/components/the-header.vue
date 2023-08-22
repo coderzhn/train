@@ -1,6 +1,9 @@
 <template>
   <a-layout-header class="header">
     <div class="logo">
+      <router-link to="/welcome" style="color: white">
+        12306控台
+      </router-link>
     </div>
     <div style="float: right; color: white;">
       您好：{{member.mobile}} &nbsp;&nbsp;
