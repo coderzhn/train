@@ -1,6 +1,5 @@
-package com.zhn.train.business.controller;
+package com.zhn.train.business.controller.admin;
 
-import com.zhn.train.common.context.LoginMemberContext;
 import com.zhn.train.common.resp.CommonResp;
 import com.zhn.train.common.resp.PageResp;
 import com.zhn.train.business.req.StationQueryReq;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/station")
-public class StationController {
+public class StationAdminController {
 
     @Resource
     private StationService stationService;
