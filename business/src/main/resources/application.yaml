@@ -5,7 +5,7 @@ server:
 spring:
   # 数据库连接
   datasource:
-    url: jdbc:mysql://rm-cn-nwy3cdcr9000qk8o.rwlb.cn-chengdu.rds.aliyuncs.com/train_member?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://rm-cn-nwy3cdcr9000qk8o.rwlb.cn-chengdu.rds.aliyuncs.com/train_business?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
     username: train_business
     password: Zhn789@@
     driver-class-name: com.mysql.cj.jdbc.Driver
