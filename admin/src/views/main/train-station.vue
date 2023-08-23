@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { defineComponent, ref,watch } from 'vue';
+import { defineComponent, ref,onMounted,watch } from 'vue';
 import {notification} from "ant-design-vue";
 import axios from "axios";
 import {pinyin} from "pinyin-pro";
@@ -156,7 +156,12 @@ export default defineComponent({
       trainStation.value = window.Tool.copy(record);
       visible.value = true;
     };
-
+    onMounted(() => {
+      handleQuery({
+        page: 1,
+        size: pagination.value.pageSize
+      });
+    });
     const onDelete = (record) => {
       axios.delete("/business/admin/train-station/delete/" + record.id).then((response) => {
         const data = response.data;
@@ -180,7 +185,7 @@ export default defineComponent({
           visible.value = false;
           handleQuery({
             page: pagination.value.current,
-            size: pagination.value.pageSize
+            size: pagination.value.pageSize,
           });
         } else {
           notification.error({description: data.message});
