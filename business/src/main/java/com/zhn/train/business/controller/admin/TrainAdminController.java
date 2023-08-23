@@ -31,7 +31,7 @@ public class TrainAdminController {
         return new CommonResp<>(list);
     }
     @GetMapping("/query-all")
-    public CommonResp<List<TrainQueryResp>> queryAll(@Valid TrainQueryReq req) {
+    public CommonResp<List<TrainQueryResp>> queryAll() {
         List<TrainQueryResp> list = trainService.queryAll();
         return new CommonResp<>(list);
     }
