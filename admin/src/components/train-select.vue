@@ -1,7 +1,8 @@
 <template>
   <a-select v-model:value="trainCode" show-search allowClear
             :filterOption="filterTrainCodeOption"
-            @change="onChange" placeholder="请选择车次">
+            @change="onChange" placeholder="请选择车次"
+            :style="'width: ' + localWidth">
     <a-select-option v-for="item in trains" :key="item.code" :value="item.code" :label="item.code + item.start + item.end">
       {{item.code}} {{item.start}} ~ {{item.end}}
     </a-select-option>
@@ -16,11 +17,15 @@ import {notification} from "ant-design-vue";
 
 export default defineComponent({
   name: "train-select-view",
-  props: ["modelValue"],
+  props: ["modelValue", "width"],
   emits: ['update:modelValue', 'change'],
   setup(props, {emit}) {
     const trainCode = ref();
     const trains = ref([]);
+    const localWidth = ref(props.width);
+    if (Tool.isEmpty(props.width)) {
+      localWidth.value = "100%";
+    }
 
     // 利用watch，动态获取父组件的值，如果放在onMounted或其它方法里，则只有第一次有效
     watch(() => props.modelValue, ()=>{
@@ -72,6 +77,7 @@ export default defineComponent({
       trains,
       filterTrainCodeOption,
       onChange,
+      localWidth
     };
   },
 });
