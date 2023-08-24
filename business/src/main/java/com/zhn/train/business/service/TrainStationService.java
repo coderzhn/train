@@ -1,18 +1,21 @@
 package com.zhn.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhn.train.common.resp.PageResp;
-import com.zhn.train.common.util.SnowUtil;
 import com.zhn.train.business.domain.TrainStation;
 import com.zhn.train.business.domain.TrainStationExample;
 import com.zhn.train.business.mapper.TrainStationMapper;
 import com.zhn.train.business.req.TrainStationQueryReq;
 import com.zhn.train.business.req.TrainStationSaveReq;
 import com.zhn.train.business.resp.TrainStationQueryResp;
+import com.zhn.train.common.exception.BusinessException;
+import com.zhn.train.common.exception.BusinessExceptionEnum;
+import com.zhn.train.common.resp.PageResp;
+import com.zhn.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,10 @@ public class TrainStationService {
         DateTime now = DateTime.now();
         TrainStation trainStation = BeanUtil.copyProperties(req, TrainStation.class);
         if (ObjectUtil.isNull(trainStation.getId())) {
+            TrainStation trainStationDB = selectByUnique(req.getTrainCode(),req.getName());
+            if(ObjectUtil.isNotEmpty(trainStationDB)){
+                throw  new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_STATION_INDEX_UNIQUE_ERROR);
+            }
             trainStation.setId(SnowUtil.getSnowflakeNextId());
             trainStation.setCreateTime(now);
             trainStation.setUpdateTime(now);
@@ -68,5 +75,19 @@ public class TrainStationService {
 
     public void delete(Long id) {
         trainStationMapper.deleteByPrimaryKey(id);
+    }
+
+    private TrainStation selectByUnique(String trainCode, String name) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andNameEqualTo(name);
+        List<TrainStation> list = trainStationMapper.selectByExample(trainStationExample);
+        if(CollUtil.isNotEmpty(list)){
+            return list.get(0);
+        }
+        else {
+            return null;
+        }
     }
 }

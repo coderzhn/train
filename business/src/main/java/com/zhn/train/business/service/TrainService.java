@@ -1,18 +1,21 @@
 package com.zhn.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhn.train.common.resp.PageResp;
-import com.zhn.train.common.util.SnowUtil;
 import com.zhn.train.business.domain.Train;
 import com.zhn.train.business.domain.TrainExample;
 import com.zhn.train.business.mapper.TrainMapper;
 import com.zhn.train.business.req.TrainQueryReq;
 import com.zhn.train.business.req.TrainSaveReq;
 import com.zhn.train.business.resp.TrainQueryResp;
+import com.zhn.train.common.exception.BusinessException;
+import com.zhn.train.common.exception.BusinessExceptionEnum;
+import com.zhn.train.common.resp.PageResp;
+import com.zhn.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,10 @@ public class TrainService {
         DateTime now = DateTime.now();
         Train train = BeanUtil.copyProperties(req, Train.class);
         if (ObjectUtil.isNull(train.getId())) {
+            Train trainDB = selectByUnique(req.getCode());
+            if(ObjectUtil.isNotEmpty(trainDB)){
+                throw  new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_CODE_UNIQUE_ERROR);
+            }
             train.setId(SnowUtil.getSnowflakeNextId());
             train.setCreateTime(now);
             train.setUpdateTime(now);
@@ -68,6 +75,18 @@ public class TrainService {
         trainExample.setOrderByClause("code asc");
         List<Train> trainList = trainMapper.selectByExample(trainExample);
         return  BeanUtil.copyToList(trainList, TrainQueryResp.class);
+    }
+    private Train selectByUnique(String code) {
+        TrainExample trainExample = new TrainExample();
+        trainExample.createCriteria()
+                .andCodeEqualTo(code);
+        List<Train> list = trainMapper.selectByExample(trainExample);
+        if(CollUtil.isNotEmpty(list)){
+            return list.get(0);
+        }
+        else {
+            return null;
+        }
     }
 
     public void delete(Long id) {
