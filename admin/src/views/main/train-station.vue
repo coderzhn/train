@@ -90,7 +90,7 @@ export default defineComponent({
       pageSize: 10,
     });
     let params = ref({
-      trainCode: ""
+      trainCode: null
     });
     let loading = ref(false);
     const columns = [
