@@ -215,12 +215,6 @@ export default defineComponent({
       });
     };
 
-    onMounted(() => {
-      handleQuery({
-        page: 1,
-        size: pagination.value.pageSize
-      });
-    });
 
     return {
       SEAT_TYPE_ARRAY,
