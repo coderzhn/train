@@ -109,7 +109,6 @@ public class TrainSeatService {
                     trainSeat.setCarriageSeatIndex(seatIndex++);
                     trainSeat.setCreateTime(now);
                     trainSeat.setUpdateTime(now);
-
                     trainSeatMapper.insert(trainSeat);
                 }
             }
