@@ -15,6 +15,16 @@
         <template v-if="column.dataIndex === 'operation'">
           <a-space>
             <a-popconfirm
+                title="手动执行会立即执行一次，确定执行？"
+                ok-text="是"
+                cancel-text="否"
+                @confirm="handleRun(record)"
+            >
+              <a-button type="primary" size="small">
+                手动执行
+              </a-button>
+            </a-popconfirm>
+            <a-popconfirm
                 title="确定重启？"
                 ok-text="是"
                 cancel-text="否"
