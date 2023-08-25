@@ -1,0 +1,44 @@
+POST http://localhost:8000/member/passenger/save
+Content-Type: application/json
+token: {{token}}
+
+{
+  "name": "zhnd1111",
+  "idCard": "123321",
+  "type": "1"
+}
+
+
+###
+POST http://localhost:8000/member/passenger/save
+Content-Type: application/json
+token: {{token}}
+
+{
+  "id": 1692097051501924352,
+  "memberId": 1624581077500825600,
+  "name": "更正后测试",
+  "idCard": "1233211234567",
+  "type": "1"
+}
+
+###
+
+GET http://localhost:8000/member/passenger/query-list?page=1&size=4
+Accept: application/json
+token: {{token}}
+
+###
+
+GET http://localhost:8000/member/passenger/query-list
+Accept: application/json
+token: {{token}}
+
+###
+
+DELETE http://localhost:8000/member/passenger/delete/1692097051501924352
+Accept: application/json
+token:{{token}}
+
+
+###
