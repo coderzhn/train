@@ -2,7 +2,7 @@
   <a-layout-sider width="200" style="background: #fff">
     <a-menu
         v-model:selectedKeys="selectedKeys"
-        open-keys="['batch','base']"
+        :openKeys="['batch', 'base', 'business']"
         mode="inline"
         :style="{ height: '100%', borderRight: 0 }"
     >
@@ -16,16 +16,41 @@
           <user-outlined /> &nbsp; 关于
         </router-link>
       </a-menu-item>
-      <a-sub-menu key="batch">
+      <a-sub-menu key="business">
         <template #title>
           <span>
             <UnorderedListOutlined />
-            跑批管理
+            业务管理
           </span>
         </template>
-        <a-menu-item key="/batch/job">
-          <router-link to="/batch/job">
-            <user-outlined /> &nbsp; 任务管理
+        <a-menu-item key="/business/confirm-order">
+          <router-link to="/business/confirm-order">
+            <user-outlined /> &nbsp; 订单信息
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/daily-train-ticket">
+          <router-link to="/business/daily-train-ticket">
+            <user-outlined /> &nbsp; 余票信息
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/daily-train">
+          <router-link to="/business/daily-train">
+            <user-outlined /> &nbsp; 每日车次
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/daily-train-station">
+          <router-link to="/business/daily-train-station">
+            <user-outlined /> &nbsp; 每日车站
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/daily-train-carriage">
+          <router-link to="/business/daily-train-carriage">
+            <user-outlined /> &nbsp; 每日车厢
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/daily-train-seat">
+          <router-link to="/business/daily-train-seat">
+            <user-outlined /> &nbsp; 每日座位
           </router-link>
         </a-menu-item>
       </a-sub-menu>
@@ -62,7 +87,19 @@
           </router-link>
         </a-menu-item>
       </a-sub-menu>
-
+      <a-sub-menu key="batch">
+        <template #title>
+          <span>
+            <UnorderedListOutlined />
+            跑批管理
+          </span>
+        </template>
+        <a-menu-item key="/batch/job">
+          <router-link to="/batch/job">
+            <MenuUnfoldOutlined /> &nbsp; 任务管理
+          </router-link>
+        </a-menu-item>
+      </a-sub-menu>
     </a-menu>
   </a-layout-sider>
 </template>
