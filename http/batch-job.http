@@ -56,10 +56,10 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8000/batch/admin/job/run
+GET http://localhost:8000/batch/admin/job/run
 Content-Type: application/json
 
 {
-"name": "com.jiawa.train.batch.job.DailyTrainJob",
+"name": "com.zhn.train.batch.job.DailyTrainJob",
 "jobGroupName": "default"
 }
