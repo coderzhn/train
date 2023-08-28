@@ -3,7 +3,7 @@
     <a-space>
       <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
       <train-select-view v-model="params.code" width="200px"></train-select-view>
-      <a-button type="primary" @click="handleQuery()">刷新</a-button>
+      <a-button type="primary" @click="handleQuery()">查询</a-button>
       <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
   </p>
