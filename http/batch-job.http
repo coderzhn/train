@@ -56,7 +56,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8000/batch/admin/job/run
+POST http://localhost:8000/batch/admin/job/run
 Content-Type: application/json
 
 {
