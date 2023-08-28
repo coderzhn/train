@@ -3,7 +3,6 @@
     <a-space>
       <train-select-view v-model="params.trainCode" width="200px"></train-select-view>
       <a-button type="primary" @click="handleQuery()">查找</a-button>
-      <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
   </p>
   <a-table :dataSource="trainSeats"
