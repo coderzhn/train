@@ -9,7 +9,9 @@ spring:
     username: train_member
     password: Zhn789@@
     driver-class-name: com.mysql.cj.jdbc.Driver
-# mybatis xml路径
+  application:
+    name: member
+  # mybatis xml路径
   devtools:
     livereload:
       port: 35728
