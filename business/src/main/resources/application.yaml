@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /business
 spring:
+  application:
+    name: business
   # 数据库连接
   datasource:
     url: jdbc:mysql://rm-cn-nwy3cdcr9000qk8o.rwlb.cn-chengdu.rds.aliyuncs.com/train_business?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
