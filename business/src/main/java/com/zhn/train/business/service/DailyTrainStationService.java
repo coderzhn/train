@@ -34,6 +34,7 @@ public class DailyTrainStationService {
     private DailyTrainStationMapper dailyTrainStationMapper;
     @Resource
     TrainStationService trainStationService;
+
     public void save(DailyTrainStationSaveReq req) {
         DateTime now = DateTime.now();
         DailyTrainStation dailyTrainStation = BeanUtil.copyProperties(req, DailyTrainStation.class);
@@ -104,6 +105,7 @@ public class DailyTrainStationService {
             dailyTrainStation.setUpdateTime(now);
             dailyTrainStation.setDate(date);
             dailyTrainStationMapper.insert(dailyTrainStation);
+
         }
         LOG.info("生成日期【{}】车次【{}】的车站信息结束", DateUtil.formatDate(date), trainCode);
     }
