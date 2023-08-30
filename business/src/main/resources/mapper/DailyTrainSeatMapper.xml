@@ -189,7 +189,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.zhn.train.business.domain.DailyTrainSeatExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.zhn.train.business.domain.DailyTrainSeatExample" resultType="java.lang.Integer">
     select count(*) from daily_train_seat
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

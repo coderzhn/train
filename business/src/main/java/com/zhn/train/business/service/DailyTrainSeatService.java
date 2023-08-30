@@ -8,10 +8,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhn.train.business.domain.DailyTrainSeat;
-import com.zhn.train.business.domain.DailyTrainSeatExample;
-import com.zhn.train.business.domain.TrainSeat;
-import com.zhn.train.business.domain.TrainStation;
+import com.zhn.train.business.domain.*;
 import com.zhn.train.business.mapper.DailyTrainSeatMapper;
 import com.zhn.train.business.req.DailyTrainSeatQueryReq;
 import com.zhn.train.business.req.DailyTrainSeatSaveReq;
@@ -115,5 +112,13 @@ public class DailyTrainSeatService {
             dailyTrainSeatMapper.insert(dailyTrainSeat);
         }
         LOG.info("生成日期【{}】车次【{}】的座位信息结束", DateUtil.formatDate(date), trainCode);
+    }
+    public Integer countSeat(Date date,String trainCode,String seatType){
+        DailyTrainSeatExample dailyTrainSeatExample = new DailyTrainSeatExample();
+        dailyTrainSeatExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode)
+                .andSeatTypeEqualTo(seatType);
+        return dailyTrainSeatMapper.countByExample(dailyTrainSeatExample);
     }
 }
