@@ -2,11 +2,12 @@ package com.zhn.train.business.mapper;
 
 import com.zhn.train.business.domain.DailyTrainSeat;
 import com.zhn.train.business.domain.DailyTrainSeatExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface DailyTrainSeatMapper {
-    long countByExample(DailyTrainSeatExample example);
+    int countByExample(DailyTrainSeatExample example);
 
     int deleteByExample(DailyTrainSeatExample example);
 
