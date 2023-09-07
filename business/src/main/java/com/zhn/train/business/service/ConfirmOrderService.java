@@ -5,13 +5,13 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zhn.train.business.req.ConfirmOrderDoReq;
 import com.zhn.train.common.resp.PageResp;
 import com.zhn.train.common.util.SnowUtil;
 import com.zhn.train.business.domain.ConfirmOrder;
 import com.zhn.train.business.domain.ConfirmOrderExample;
 import com.zhn.train.business.mapper.ConfirmOrderMapper;
 import com.zhn.train.business.req.ConfirmOrderQueryReq;
-import com.zhn.train.business.req.ConfirmOrderSaveReq;
 import com.zhn.train.business.resp.ConfirmOrderQueryResp;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class ConfirmOrderService {
     @Resource
     private ConfirmOrderMapper confirmOrderMapper;
 
-    public void save(ConfirmOrderSaveReq req) {
+    public void save(ConfirmOrderDoReq req) {
         DateTime now = DateTime.now();
         ConfirmOrder confirmOrder = BeanUtil.copyProperties(req, ConfirmOrder.class);
         if (ObjectUtil.isNull(confirmOrder.getId())) {
@@ -66,5 +66,21 @@ public class ConfirmOrderService {
 
     public void delete(Long id) {
         confirmOrderMapper.deleteByPrimaryKey(id);
+    }
+
+    public void doConfirm(ConfirmOrderDoReq req) {
+        //TODO 省略业务数据校验
+        //TODO 保存确认订单表，状态初始
+        //TODO 查出余票记录，需要得到真实的库存
+        //TODO 扣减余票数量，并判断余票是否重组
+        //TODO 选座
+            //TODO 一个车厢一个车厢的获取座位
+            //TODO 挑选符合条件的座位，如果这个车厢不满足，则进入下一个车厢
+        //TODO 选中座位后事务处理
+            //TODO 座位表修改售卖情况sell
+            //TODO 余票详情表修改余票
+            //TODO 为会员增加购票记录
+            //TODO 更新确认订单为成功
+
     }
 }
