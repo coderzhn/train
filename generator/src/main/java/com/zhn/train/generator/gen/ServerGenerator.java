@@ -75,7 +75,7 @@ public class ServerGenerator {
         param.put("typeSet", typeSet);
         param.put("readOnly", readOnly);
         System.out.println("组装参数：" + param);
-
+//
 //         gen(Domain, param, "service", "service");
 //         gen(Domain, param, "controller/admin", "adminController");
 //         gen(Domain, param, "resp", "queryResp");
