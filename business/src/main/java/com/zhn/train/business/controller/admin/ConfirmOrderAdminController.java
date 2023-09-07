@@ -1,10 +1,9 @@
 package com.zhn.train.business.controller.admin;
 
-import com.zhn.train.common.context.LoginMemberContext;
 import com.zhn.train.common.resp.CommonResp;
 import com.zhn.train.common.resp.PageResp;
 import com.zhn.train.business.req.ConfirmOrderQueryReq;
-import com.zhn.train.business.req.ConfirmOrderSaveReq;
+import com.zhn.train.business.req.ConfirmOrderDoReq;
 import com.zhn.train.business.resp.ConfirmOrderQueryResp;
 import com.zhn.train.business.service.ConfirmOrderService;
 import jakarta.annotation.Resource;
@@ -19,7 +18,7 @@ public class ConfirmOrderAdminController {
     private ConfirmOrderService confirmOrderService;
 
     @PostMapping("/save")
-    public CommonResp<Object> save(@Valid @RequestBody ConfirmOrderSaveReq req) {
+    public CommonResp<Object> save(@Valid @RequestBody ConfirmOrderDoReq req) {
         confirmOrderService.save(req);
         return new CommonResp<>();
     }

@@ -1,18 +1,15 @@
 package com.zhn.train.business.req;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-@Data
-public class ConfirmOrderSaveReq {
 
-    /**
-     * id
-     */
-    private Long id;
+import java.util.Date;
+import java.util.List;
+
+@Data
+public class ConfirmOrderDoReq {
     /**
      * 会员id
      */
@@ -48,29 +45,14 @@ public class ConfirmOrderSaveReq {
      * 车票
      */
     @NotBlank(message = "【车票】不能为空")
-    private String tickets;
-    /**
-     * 订单状态|枚举[ConfirmOrderStatusEnum]
-     */
-    @NotBlank(message = "【订单状态】不能为空")
-    private String status;
-    /**
-     * 新增时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date createTime;
-    /**
-     * 修改时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date updateTime;
+    private List<ConfirmOrderTicketReq> tickets;
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", memberId=").append(memberId);
         sb.append(", date=").append(date);
         sb.append(", trainCode=").append(trainCode);
@@ -78,9 +60,6 @@ public class ConfirmOrderSaveReq {
         sb.append(", end=").append(end);
         sb.append(", dailyTrainTicketId=").append(dailyTrainTicketId);
         sb.append(", tickets=").append(tickets);
-        sb.append(", status=").append(status);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
         sb.append("]");
         return sb.toString();
     }
