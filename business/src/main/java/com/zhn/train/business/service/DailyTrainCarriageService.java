@@ -122,4 +122,5 @@ public class DailyTrainCarriageService {
                 .andSeatTypeEqualTo(seatType);
         return dailyTrainCarriageMapper.selectByExample(example);
     }
+
 }
