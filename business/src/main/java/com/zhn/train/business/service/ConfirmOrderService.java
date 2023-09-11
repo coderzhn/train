@@ -112,8 +112,12 @@ public class ConfirmOrderService {
         //查出余票记录，需要得到真实的库存
         DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.selectByUnique(date, trainCode, start, end);
         LOG.info("查出余票记录:{}",dailyTrainTicket);
-        // 扣减余票数量，并判断余票是否重组
+        // 扣减余票数量，并判断余票是否充足
         reduceTickets(req, dailyTrainTicket);
+
+        //最终选票结果
+        List<DailyTrainSeat> finalSeatList = new ArrayList<>();
+
         // 计算相对第一个座位的偏移量
         // 比如选择的是C1，D2，则偏移值是:[0，5]
         // 比如选择的是A1,B1,C1，则偏移值是:[0，1，2]
@@ -143,7 +147,11 @@ public class ConfirmOrderService {
                 int offset = index - absoluteOffSetList.get(0);
                 offsetList.add(offset);
             }
-            getSeat(date,trainCode,ticketReq0.getSeatTypeCode(),
+            getSeat(
+                    finalSeatList,
+                    date,
+                    trainCode,
+                    ticketReq0.getSeatTypeCode(),
                     ticketReq0.getSeat().split("")[0],//从A1得到A
                     offsetList,
                     dailyTrainTicket.getStartIndex(),
@@ -152,7 +160,8 @@ public class ConfirmOrderService {
         }else {
             LOG.info("本次购票没有选座");
             for (ConfirmOrderTicketReq ticketReq: tickets){
-                getSeat(date,
+                getSeat(finalSeatList,
+                        date,
                         trainCode,
                         ticketReq0.getSeatTypeCode(),
                         null,
@@ -161,8 +170,8 @@ public class ConfirmOrderService {
                         dailyTrainTicket.getEndIndex()
                 );
             }
-
         }
+        LOG.info("最终选座：{}",finalSeatList);
 
         //TODO 选座
         //TODO 挑选符合条件的座位，如果这个车厢不满足，则进入下一个车厢
@@ -176,77 +185,102 @@ public class ConfirmOrderService {
 
     /**
      * 选座位，如果有选座 则一次性挑完，如果无选座，则一个一个挑选
+     * @param finalSeatList 座位
      * @param date
-     * @param trainCode
-     * @param seatType
+     * @param trainCode 车次编号
+     * @param seatType 座位类型
      * @param column
-     * @param offset
+     * @param offsetList
+     * @param startIndex
+     * @param endIndex
      */
-    private void getSeat(Date date, String trainCode, String seatType,String column,List<Integer> offset,
-                         Integer startIndex,Integer endIndex){
+    private void getSeat(List<DailyTrainSeat> finalSeatList, Date date, String trainCode, String seatType, String column, List<Integer> offsetList, Integer startIndex, Integer endIndex) {
+        List<DailyTrainSeat> getSeatList = new ArrayList<>();
         List<DailyTrainCarriage> carriageList = dailyTrainCarriageService.selectBySeatType(date, trainCode, seatType);
-        LOG.info("共查出{}个符合条件的车厢",carriageList.size());
-        //一个一个车厢获取数据
-        for(DailyTrainCarriage dailyTrainCarriage:carriageList){
-            LOG.info(" 开始从车厢{}选座",dailyTrainCarriage.getIndex());
+        LOG.info("共查出{}个符合条件的车厢", carriageList.size());
+
+        // 一个车箱一个车箱的获取座位数据
+        for (DailyTrainCarriage dailyTrainCarriage : carriageList) {
+            LOG.info("开始从车厢{}选座", dailyTrainCarriage.getIndex());
+            getSeatList = new ArrayList<>();
             List<DailyTrainSeat> seatList = dailyTrainSeatService.selectByCarriage(date, trainCode, dailyTrainCarriage.getIndex());
-            LOG.info("车厢{}的座位数:{}",dailyTrainCarriage.getIndex(),seatList.size());
-            for(DailyTrainSeat dailyTrainSeat:seatList){
+            LOG.info("车厢{}的座位数：{}", dailyTrainCarriage.getIndex(), seatList.size());
+            for (int i = 0; i < seatList.size(); i++) {
+                DailyTrainSeat dailyTrainSeat = seatList.get(i);
                 Integer seatIndex = dailyTrainSeat.getCarriageSeatIndex();
-                //判断column，有数值的话要比对序列号
                 String col = dailyTrainSeat.getCol();
-                if(StrUtil.isBlank(col)){
-                    LOG.info("没有选座");
-                }else {
-                    LOG.info("有选座");
-                    if(!column.equals(col)){
-                        LOG.info("座位{}列值不对，继续判断下一个座位,列值为:{}，目标列值:{}"
-                        ,seatIndex,col,column);
+
+                // 判断当前座位不能被选中过
+                boolean alreadyChooseFlag = false;
+                for (DailyTrainSeat finalSeat : finalSeatList){
+                    if (finalSeat.getId().equals(dailyTrainSeat.getId())) {
+                        alreadyChooseFlag = true;
+                        break;
+                    }
+                }
+                if (alreadyChooseFlag) {
+                    LOG.info("座位{}被选中过，不能重复选中，继续判断下一个座位", seatIndex);
+                    continue;
+                }
+
+                // 判断column，有值的话要比对列号
+                if (StrUtil.isBlank(column)) {
+                    LOG.info("无选座");
+                } else {
+                    if (!column.equals(col)) {
+                        LOG.info("座位{}列值不对，继续判断下一个座位，当前列值：{}，目标列值：{}", seatIndex, col, column);
                         continue;
                     }
                 }
+
                 boolean isChoose = calSell(dailyTrainSeat, startIndex, endIndex);
-                if(isChoose){
-                    LOG.info("选中座位:");
-                }else {
+                if (isChoose) {
+                    LOG.info("选中座位");
+                    getSeatList.add(dailyTrainSeat);
+                } else {
                     continue;
                 }
 
+                // 根据offset选剩下的座位
                 boolean isGetAllOffsetSeat = true;
-                //根据offset选剩下的座位
-                if (CollUtil.isNotEmpty(offset)) {
-                    LOG.info("有偏移值:{}，校验偏移的座位是否可选",offset);
-                    for (int i = 0;i < offset.size();i++){
-                        Integer offset0 = offset.get(i);
-                        int nextIndex = offset0 + seatIndex -1;
-                        //有选座时，一定是在同一个车厢
-                        if(nextIndex >= seatList.size()){
-                            LOG.info("座位{}不可选，偏移后的索引超出了这个车厢的座位数",nextIndex);
+                if (CollUtil.isNotEmpty(offsetList)) {
+                    LOG.info("有偏移值：{}，校验偏移的座位是否可选", offsetList);
+                    // 从索引1开始，索引0就是当前已选中的票
+                    for (int j = 1; j < offsetList.size(); j++) {
+                        Integer offset = offsetList.get(j);
+                        // 座位在库的索引是从1开始
+                        // int nextIndex = seatIndex + offset - 1;
+                        int nextIndex = i + offset;
+
+                        // 有选座时，一定是在同一个车箱
+                        if (nextIndex >= seatList.size()) {
+                            LOG.info("座位{}不可选，偏移后的索引超出了这个车箱的座位数", nextIndex);
                             isGetAllOffsetSeat = false;
                             break;
-
                         }
+
                         DailyTrainSeat nextDailyTrainSeat = seatList.get(nextIndex);
-                        boolean isChooseNext = calSell(dailyTrainSeat, startIndex, endIndex);
-                        if(isChooseNext){
-                            LOG.info("座位{}被选中:",nextDailyTrainSeat.getCarriageSeatIndex());
-                            return;
-                        }else {
-                            LOG.info("座位{}不可选:",nextDailyTrainSeat.getCarriageSeatIndex());
+                        boolean isChooseNext = calSell(nextDailyTrainSeat, startIndex, endIndex);
+                        if (isChooseNext) {
+                            LOG.info("座位{}被选中", nextDailyTrainSeat.getCarriageSeatIndex());
+                            getSeatList.add(nextDailyTrainSeat);
+                        } else {
+                            LOG.info("座位{}不可选", nextDailyTrainSeat.getCarriageSeatIndex());
                             isGetAllOffsetSeat = false;
                             break;
                         }
                     }
                 }
-                if(!isGetAllOffsetSeat){
+                if (!isGetAllOffsetSeat) {
+                    getSeatList = new ArrayList<>();
                     continue;
                 }
 
-                //保存选好的座位
+                // 保存选好的座位
+                finalSeatList.addAll(getSeatList);
                 return;
             }
         }
-
     }
 
     /**
