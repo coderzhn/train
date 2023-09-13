@@ -3,6 +3,11 @@ Accept: application/json
 token: {{token}}
 
 ###
+GET http://localhost:8000/member/hello
+Accept: application/json
+token: {{token}}
+
+###
 
 POST http://localhost:8000/member/member/register
 Content-Type: application/x-www-form-urlencoded
