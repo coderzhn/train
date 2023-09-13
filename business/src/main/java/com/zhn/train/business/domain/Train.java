@@ -2,11 +2,10 @@ package com.zhn.train.business.domain;
 
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class Train implements Serializable {
+public class Train{
     private Long id;
 
     private String code;
