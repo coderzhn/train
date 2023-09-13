@@ -1,0 +1,9 @@
+# nacos server 地址
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        namespace: train
+        server-addr: 127.0.0.1:8858
