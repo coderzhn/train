@@ -14,7 +14,7 @@ spring:
     livereload:
       port: 35728
   application:
-    name: business
+    name: batch
 logging:
     level:
       com.zhn.train.batch.mapper:

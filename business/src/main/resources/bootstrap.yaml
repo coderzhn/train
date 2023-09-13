@@ -1,0 +1,15 @@
+# nacos server 地址
+spring:
+  application:
+    name: business
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+        namespace: train
+        server-addr: 127.0.0.1:8858
+      discovery:
+        namespace: train
+        server-addr: 127.0.0.1:8858
+  profiles:
+    active: dev
