@@ -16,6 +16,6 @@ public class TestController {
     public String hello(){
         String businessHello = businessFeign.hello();
         LOG.info(businessHello);
-        return "hello business!";
+        return "hello business!"+businessHello;
     }
 }
