@@ -16,6 +16,7 @@ import com.zhn.train.common.exception.BusinessException;
 import com.zhn.train.common.exception.BusinessExceptionEnum;
 import com.zhn.train.common.resp.PageResp;
 import com.zhn.train.common.util.SnowUtil;
+import io.seata.core.context.RootContext;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ public class TrainService {
     private TrainMapper trainMapper;
 
     public void save(TrainSaveReq req) {
+        LOG.info("全局事务ID save:{}", RootContext.getXID());
         DateTime now = DateTime.now();
         Train train = BeanUtil.copyProperties(req, Train.class);
         if (ObjectUtil.isNull(train.getId())) {
