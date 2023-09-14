@@ -13,3 +13,15 @@ spring:
         server-addr: 127.0.0.1:8858
   profiles:
     active: dev
+
+
+seata:
+  #事务组名称
+  tx-service-group: train-group
+  service:
+    #事务组和seata集群做关联
+    vgroup-mapping:
+      train-group: default
+    #seata集群对应的机器
+    grouplist:
+      default: 127.0.0.1:8091

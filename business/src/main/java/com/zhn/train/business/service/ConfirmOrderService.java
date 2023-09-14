@@ -175,11 +175,16 @@ public class ConfirmOrderService {
         }
         LOG.info("最终选座：{}",finalSeatList);
         //选中座位后事务处理
-        //TODO 座位表修改售卖情况sell
-        //TODO 余票详情表修改余票
-        //TODO 为会员增加购票记录
-        //TODO 更新确认订单为成功
-        afterConfirmOrderService.afterDoConfirm(dailyTrainTicket,finalSeatList,tickets,confirmOrder);
+        //座位表修改售卖情况sell
+        //余票详情表修改余票
+        //为会员增加购票记录
+        //更新确认订单为成功
+        try {
+            afterConfirmOrderService.afterDoConfirm(dailyTrainTicket,finalSeatList,tickets,confirmOrder);
+        } catch (Exception e) {
+            LOG.info("保存购票信息失败",e);
+            throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_EXCEPTION);
+        }
     }
 
     /**
