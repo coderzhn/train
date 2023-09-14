@@ -57,6 +57,12 @@ public class DailyTrainTicketService {
 
     @Cacheable(value = "DailyTrainTicketService.queryList")
     public PageResp<DailyTrainTicketQueryResp> queryList(DailyTrainTicketQueryReq req) {
+        //去缓存里取数据
+        //   if(有数据){ null []
+        //       return
+        //   }else {
+        //    去数据库取数据
+        //   }
         DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
         dailyTrainTicketExample.setOrderByClause("id desc");
         DailyTrainTicketExample.Criteria criteria = dailyTrainTicketExample.createCriteria();
