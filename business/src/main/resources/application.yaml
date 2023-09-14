@@ -3,14 +3,27 @@ server:
   servlet:
     context-path: /business
 spring:
+  data:
+    redis:
+      host: 82.157.239.153
+      port: 6379
+      password: 101011
   application:
     name: business
+  cache:
+    type: redis
+    redis:
+      use-key-prefix: true
+      key-prefix: train_cache_
+      cache-null-values: true
+      time-to-live: 60s
   # 数据库连接
   datasource:
     url: jdbc:mysql://rm-cn-nwy3cdcr9000qk8o.rwlb.cn-chengdu.rds.aliyuncs.com/train_business?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
     username: train_business
     password: Zhn789@@
     driver-class-name: com.mysql.cj.jdbc.Driver
+
 # mybatis xml路径
   devtools:
     livereload:
@@ -23,5 +36,6 @@ mybatis:
   mapper-locations: classpath:/mapper/**/*.xml
   configuration:
     local-cache-scope: statement
+
 
 
