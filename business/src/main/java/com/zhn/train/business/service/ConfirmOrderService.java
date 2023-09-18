@@ -27,11 +27,14 @@ import com.zhn.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ConfirmOrderService {
@@ -48,6 +51,9 @@ public class ConfirmOrderService {
     private DailyTrainSeatService dailyTrainSeatService;
     @Resource
     private AfterConfirmOrderService afterConfirmOrderService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     public void save(ConfirmOrderDoReq req) {
         DateTime now = DateTime.now();
@@ -89,7 +95,19 @@ public class ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
+    //synchronized 同步锁，无法解决多节点超卖问题
+//    public synchronized void doConfirm(ConfirmOrderDoReq req) {
     public void doConfirm(ConfirmOrderDoReq req) {
+        String lockKey = req.getDate()+"-"+req.getTrainCode();
+        Boolean setIfAbsent = redisTemplate.opsForValue().setIfAbsent(lockKey, lockKey, 5, TimeUnit.SECONDS);
+        if(setIfAbsent){
+            LOG.info("恭喜，抢到锁了！lockKey:{}",lockKey);
+        }else {
+            LOG.info("很遗憾，没有抢到锁 lockKey:{}",lockKey);
+            throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
+        }
+
+
         // 省略业务数据校验
         // 保存确认订单表，状态初始
         ConfirmOrder confirmOrder = new ConfirmOrder();
@@ -185,6 +203,8 @@ public class ConfirmOrderService {
             LOG.info("保存购票信息失败",e);
             throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_EXCEPTION);
         }
+        LOG.info("购票结流程束，释放锁! lockKey:{}",lockKey);
+        redisTemplate.delete(lockKey);
     }
 
     /**

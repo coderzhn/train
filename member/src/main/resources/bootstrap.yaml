@@ -13,16 +13,31 @@ spring:
         server-addr: 127.0.0.1:8858
   profiles:
     active: dev
-test:
-  nacos: hello========
-
 seata:
   #事务组名称
   tx-service-group: train-group
-  service:
-    #事务组和seata集群做关联
-    vgroup-mapping:
-      train-group: default
-    #seata集群对应的机器
-    grouplist:
-      default: 127.0.0.1:8091
+#  service:
+#    #事务组和seata集群做关联
+#    vgroup-mapping:
+#      train-group: default
+#    #seata集群对应的机器
+#    grouplist:
+#      default: 127.0.0.1:8091
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8858
+      group: SEATA_GROUP
+      namespace: train
+      username: nacos
+      password: nacos
+  config:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8858
+      group: SEATA_GROUP
+      namespace: train
+      data-id: seataServer.properties
+      username: nacos
+      password: nacos

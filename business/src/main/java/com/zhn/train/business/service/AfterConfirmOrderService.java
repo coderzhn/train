@@ -3,6 +3,7 @@ package com.zhn.train.business.service;
 import com.zhn.train.business.domain.ConfirmOrder;
 import com.zhn.train.business.domain.DailyTrainSeat;
 import com.zhn.train.business.domain.DailyTrainTicket;
+import com.zhn.train.business.enums.ConfirmOrderStatusEnum;
 import com.zhn.train.business.feign.MemberFeign;
 import com.zhn.train.business.mapper.ConfirmOrderMapper;
 import com.zhn.train.business.mapper.DailyTrainSeatMapper;
@@ -45,8 +46,8 @@ public class AfterConfirmOrderService {
      *  更新确认订单为成功
      */
     // @Transactional
-     @GlobalTransactional
-    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets, ConfirmOrder confirmOrder){
+    @GlobalTransactional(rollbackFor = Exception.class)
+    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets, ConfirmOrder confirmOrder) throws Exception {
          LOG.info("seata全局事务ID: {}", RootContext.getXID());
         for (int j = 0; j < finalSeatList.size(); j++) {
             DailyTrainSeat dailyTrainSeat = finalSeatList.get(j);
@@ -121,6 +122,19 @@ public class AfterConfirmOrderService {
             memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
             CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);
             LOG.info("调用member接口，返回：{}", commonResp);
+
+            // 更新订单状态为成功
+            ConfirmOrder confirmOrderForUpdate = new ConfirmOrder();
+            confirmOrderForUpdate.setId(confirmOrder.getId());
+            confirmOrderForUpdate.setUpdateTime(new Date());
+            confirmOrderForUpdate.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
+            confirmOrderMapper.updateByPrimaryKeySelective(confirmOrderForUpdate);
+
+            // 模拟调用方出现异常
+//             Thread.sleep(10000);
+             if (1 == 1) {
+                 throw new Exception("测试异常");
+             }
         }
     }
 }
