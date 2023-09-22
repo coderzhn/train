@@ -126,7 +126,7 @@ public class ConfirmOrderService {
                 for(int i = 0;i < 30;i++){
                     Long expire = redisTemplate.opsForValue().getOperations().getExpire(lockKey);
                     LOG.info("锁过期时间还有:{}",expire);
-                    Thread.sleep(1000);
+//                    Thread.sleep(1000);
                 }
             }else {
                 LOG.info("很遗憾，没有抢到锁 lockKey:{}",lockKey);
@@ -236,16 +236,18 @@ public class ConfirmOrderService {
                 LOG.info("保存购票信息失败",e);
                 throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_EXCEPTION);
             }
+
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-            LOG.info("购票结流程束，释放锁! lockKey:{}",lockKey);
-            if(null != lock && lock.isHeldByCurrentThread()){
-                lock.unlock();
-            }
+            // try finally不能包含加锁的那段代码，否则加锁失败会走到finally里，从而释放别的线程的锁
+            LOG.info("购票流程结束，释放锁！lockKey：{}", lockKey);
+            redisTemplate.delete(lockKey);
+            // LOG.info("购票流程结束，释放锁！");
+            // if (null != lock && lock.isHeldByCurrentThread()) {
+            //     lock.unlock();
+            // }
         }
-//            LOG.info("购票结流程束，释放锁! lockKey:{}",lockKey);
-//            redisTemplate.delete(lockKey);
     }
 
     /**
