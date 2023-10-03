@@ -15,6 +15,16 @@ spring:
       transport:
         port: 8719
         dashboard: localhost:18080
+      datasource:
+        nacos:
+          nacos:
+            server-addr: 127.0.0.7:8858
+            namespace: train
+            group-id: TRAIN_GROUP
+            data-id: sentinel
+            rule-type: flow
+            username: nacos
+            password: nacos
   profiles:
     active: dev
 
