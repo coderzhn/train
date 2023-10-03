@@ -3,6 +3,7 @@ package com.zhn.train.business.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.EnumUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -60,6 +61,8 @@ public class ConfirmOrderService {
     private StringRedisTemplate redisTemplate;
     @Autowired
     private RedissonClient redissonClient;
+    @Resource
+    private SkTokenService skTokenService;
 
     public void save(ConfirmOrderDoReq req) {
         DateTime now = DateTime.now();
@@ -105,7 +108,15 @@ public class ConfirmOrderService {
 //    public synchronized void doConfirm(ConfirmOrderDoReq req) {
     @SentinelResource(value = "doConfirm", blockHandler = "doConfirmBlock")
     public void doConfirm(ConfirmOrderDoReq req) {
-        String lockKey = req.getDate()+"-"+req.getTrainCode();
+         // 校验令牌余量
+         boolean validSkToken = skTokenService.validSkToken(req.getDate(), req.getTrainCode(), LoginMemberContext.getId());
+         if (validSkToken) {
+             LOG.info("令牌校验通过");
+         } else {
+             LOG.info("令牌校验不通过");
+             throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_SK_TOKEN_FAIL);
+         }
+        String lockKey = DateUtil.formatDate(req.getDate())+"-"+req.getTrainCode();
 //        Boolean setIfAbsent = redisTemplate.opsForValue().setIfAbsent(lockKey, lockKey, 5, TimeUnit.SECONDS);
 //        if(setIfAbsent){
 //            LOG.info("恭喜，抢到锁了！lockKey:{}",lockKey);
