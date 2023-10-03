@@ -30,8 +30,8 @@ public class BusinessApplication {
         LOG.info("启动成功!");
         LOG.info("地址: \thttp://127.0.0.1:{}",env.getProperty("server.port"));
         // // 限流规则
-         initFlowRules();
-         LOG.info("已定义限流规则");
+//         initFlowRules();
+//         LOG.info("已定义限流规则");
     }
     private static void initFlowRules(){
         List<FlowRule> rules = new ArrayList<>();
