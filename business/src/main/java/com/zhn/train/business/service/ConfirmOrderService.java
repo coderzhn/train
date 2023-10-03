@@ -133,6 +133,7 @@ public class ConfirmOrderService {
                 throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
             }
 
+
         /*
             关于红锁，看16.7节：
             A B C D E

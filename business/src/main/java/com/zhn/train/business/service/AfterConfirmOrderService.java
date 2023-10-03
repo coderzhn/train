@@ -11,7 +11,6 @@ import com.zhn.train.business.mapper.cust.DailyTrainTicketMapperCust;
 import com.zhn.train.business.req.ConfirmOrderTicketReq;
 import com.zhn.train.common.req.MemberTicketReq;
 import com.zhn.train.common.resp.CommonResp;
-import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
@@ -48,7 +47,7 @@ public class AfterConfirmOrderService {
     // @Transactional
     @GlobalTransactional(rollbackFor = Exception.class)
     public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets, ConfirmOrder confirmOrder) throws Exception {
-         LOG.info("seata全局事务ID: {}", RootContext.getXID());
+//         LOG.info("seata全局事务ID: {}", RootContext.getXID());
         for (int j = 0; j < finalSeatList.size(); j++) {
             DailyTrainSeat dailyTrainSeat = finalSeatList.get(j);
             DailyTrainSeat seatForUpdate = new DailyTrainSeat();
