@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhn.train.business.mapper.skTokenMapper">
-  <resultMap id="BaseResultMap" type="com.zhn.train.business.domain.skToken">
+<mapper namespace="com.zhn.train.business.mapper.SkTokenMapper">
+  <resultMap id="BaseResultMap" type="com.zhn.train.business.domain.SkToken">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="date" jdbcType="DATE" property="date" />
     <result column="train_code" jdbcType="VARCHAR" property="trainCode" />
@@ -70,7 +70,7 @@
   <sql id="Base_Column_List">
     id, `date`, train_code, `count`, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.zhn.train.business.domain.skTokenExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.zhn.train.business.domain.SkTokenExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -94,13 +94,13 @@
     delete from sk_token
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.zhn.train.business.domain.skTokenExample">
+  <delete id="deleteByExample" parameterType="com.zhn.train.business.domain.SkTokenExample">
     delete from sk_token
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zhn.train.business.domain.skToken">
+  <insert id="insert" parameterType="com.zhn.train.business.domain.SkToken">
     insert into sk_token (id, `date`, train_code, 
       `count`, create_time, update_time
       )
@@ -108,7 +108,7 @@
       #{count,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zhn.train.business.domain.skToken">
+  <insert id="insertSelective" parameterType="com.zhn.train.business.domain.SkToken">
     insert into sk_token
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -151,7 +151,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.zhn.train.business.domain.skTokenExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.zhn.train.business.domain.SkTokenExample" resultType="java.lang.Long">
     select count(*) from sk_token
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -195,7 +195,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhn.train.business.domain.skToken">
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhn.train.business.domain.SkToken">
     update sk_token
     <set>
       <if test="date != null">
@@ -216,7 +216,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhn.train.business.domain.skToken">
+  <update id="updateByPrimaryKey" parameterType="com.zhn.train.business.domain.SkToken">
     update sk_token
     set `date` = #{date,jdbcType=DATE},
       train_code = #{trainCode,jdbcType=VARCHAR},

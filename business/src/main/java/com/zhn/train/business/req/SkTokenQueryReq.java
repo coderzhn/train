@@ -2,11 +2,11 @@ package com.zhn.train.business.req;
 
 import com.zhn.train.common.req.PageReq;
 
-public class skTokenQueryReq extends PageReq {
+public class SkTokenQueryReq extends PageReq {
 
     @Override
     public String toString() {
-        return "skTokenQueryReq{" +
+        return "SkTokenQueryReq{" +
                 "} " + super.toString();
     }
 }

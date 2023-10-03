@@ -7,12 +7,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhn.train.common.resp.PageResp;
 import com.zhn.train.common.util.SnowUtil;
-import com.zhn.train.business.domain.skToken;
-import com.zhn.train.business.domain.skTokenExample;
-import com.zhn.train.business.mapper.skTokenMapper;
-import com.zhn.train.business.req.skTokenQueryReq;
-import com.zhn.train.business.req.skTokenSaveReq;
-import com.zhn.train.business.resp.skTokenQueryResp;
+import com.zhn.train.business.domain.SkToken;
+import com.zhn.train.business.domain.SkTokenExample;
+import com.zhn.train.business.mapper.SkTokenMapper;
+import com.zhn.train.business.req.SkTokenQueryReq;
+import com.zhn.train.business.req.SkTokenSaveReq;
+import com.zhn.train.business.resp.SkTokenQueryResp;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,16 +21,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class skTokenService {
+public class SkTokenService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(skTokenService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SkTokenService.class);
 
     @Resource
-    private skTokenMapper skTokenMapper;
+    private SkTokenMapper skTokenMapper;
 
-    public void save(skTokenSaveReq req) {
+    public void save(SkTokenSaveReq req) {
         DateTime now = DateTime.now();
-        skToken skToken = BeanUtil.copyProperties(req, skToken.class);
+        SkToken skToken = BeanUtil.copyProperties(req, SkToken.class);
         if (ObjectUtil.isNull(skToken.getId())) {
             skToken.setId(SnowUtil.getSnowflakeNextId());
             skToken.setCreateTime(now);
@@ -42,23 +42,23 @@ public class skTokenService {
         }
     }
 
-    public PageResp<skTokenQueryResp> queryList(skTokenQueryReq req) {
-        skTokenExample skTokenExample = new skTokenExample();
+    public PageResp<SkTokenQueryResp> queryList(SkTokenQueryReq req) {
+        SkTokenExample skTokenExample = new SkTokenExample();
         skTokenExample.setOrderByClause("id desc");
-        skTokenExample.Criteria criteria = skTokenExample.createCriteria();
+        SkTokenExample.Criteria criteria = skTokenExample.createCriteria();
 
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
         PageHelper.startPage(req.getPage(), req.getSize());
-        List<skToken> skTokenList = skTokenMapper.selectByExample(skTokenExample);
+        List<SkToken> skTokenList = skTokenMapper.selectByExample(skTokenExample);
 
-        PageInfo<skToken> pageInfo = new PageInfo<>(skTokenList);
+        PageInfo<SkToken> pageInfo = new PageInfo<>(skTokenList);
         LOG.info("总行数：{}", pageInfo.getTotal());
         LOG.info("总页数：{}", pageInfo.getPages());
 
-        List<skTokenQueryResp> list = BeanUtil.copyToList(skTokenList, skTokenQueryResp.class);
+        List<SkTokenQueryResp> list = BeanUtil.copyToList(skTokenList, SkTokenQueryResp.class);
 
-        PageResp<skTokenQueryResp> pageResp = new PageResp<>();
+        PageResp<SkTokenQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;
