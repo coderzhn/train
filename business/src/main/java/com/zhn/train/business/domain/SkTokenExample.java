@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class skTokenExample {
+public class SkTokenExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public skTokenExample() {
+    public SkTokenExample() {
         oredCriteria = new ArrayList<>();
     }
 
