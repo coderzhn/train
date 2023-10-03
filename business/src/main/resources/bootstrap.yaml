@@ -14,10 +14,9 @@ spring:
     sentinel:
       transport:
         port: 8719
-        dashboard: 8089
+        dashboard: localhost:18080
   profiles:
     active: dev
-
 
 seata:
   #事务组名称
