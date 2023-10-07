@@ -68,6 +68,10 @@
             <artifactId>filters</artifactId>
             <version>2.0.235</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

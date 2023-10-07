@@ -3,7 +3,7 @@ package com.zhn.train.business.controller;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.zhn.train.business.req.ConfirmOrderDoReq;
-import com.zhn.train.business.service.ConfirmOrderService;
+import com.zhn.train.business.service.BeforeConfirmOrderService;
 import com.zhn.train.common.exception.BusinessExceptionEnum;
 import com.zhn.train.common.resp.CommonResp;
 import jakarta.annotation.Resource;
@@ -25,7 +25,7 @@ public class ConfirmOrderController {
     private static final Logger LOG = LoggerFactory.getLogger(ConfirmOrderController.class);
 
     @Resource
-    private ConfirmOrderService confirmOrderService;
+    private BeforeConfirmOrderService beforeConfirmOrderService;
     @Autowired
     private StringRedisTemplate redisTemplate;
 
@@ -47,7 +47,7 @@ public class ConfirmOrderController {
             // 验证通过后，移除验证码
             redisTemplate.delete(imageCodeToken);
         }
-        confirmOrderService.doConfirm(req);
+        beforeConfirmOrderService.beforeDoConfirm(req);
         return new CommonResp<>();
     }
     /** 降级方法，需包含限流方法的所有参数和BlockException参数，且返回值要保持一致

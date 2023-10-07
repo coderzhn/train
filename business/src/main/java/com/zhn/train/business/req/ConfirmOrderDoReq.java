@@ -57,6 +57,15 @@ public class ConfirmOrderDoReq {
      */
     @NotBlank(message = "【图形验证码】参数非法")
     private String imageCodeToken;
+    /**
+     * 日志跟踪号
+     */
+    private String logId;
+
+    /**
+     * 加入排队人数，用于体验排队功能
+     */
+    private int lineNumber;
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

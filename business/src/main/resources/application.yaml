@@ -36,6 +36,8 @@ mybatis:
   mapper-locations: classpath:/mapper/**/*.xml
   configuration:
     local-cache-scope: statement
-
-
+rocketmq:
+  name-server: http://localhost:9876
+  producer:
+    group: default
 
