@@ -47,6 +47,16 @@ public class ConfirmOrderDoReq {
     @NotEmpty(message = "【车票】不能为空")
     private List<ConfirmOrderTicketReq> tickets;
 
+    /**
+     * 验证码
+     */
+    @NotBlank(message = "【图形验证码】不能为空")
+    private String imageCode;
+    /**
+     * 图形验证码token
+     */
+    @NotBlank(message = "【图形验证码】参数非法")
+    private String imageCodeToken;
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

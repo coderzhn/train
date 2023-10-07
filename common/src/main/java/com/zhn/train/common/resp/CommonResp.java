@@ -1,8 +1,10 @@
 package com.zhn.train.common.resp;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class CommonResp<T> {
 
     /**
@@ -37,3 +39,4 @@ public class CommonResp<T> {
         return sb.toString();
     }
 }
+
